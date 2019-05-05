@@ -1,0 +1,15 @@
+version: '3'
+services:
+  src:
+    image: golang:1.12
+    working_dir: /go/src/github.com/valerauko/video-transcoder
+    environment:
+      PIPELINE_ID: "dummy"
+      PRESET_ID: "dummy"
+      INPUT_PREFIX: "/"
+      VIDEO_PREFIX: "/"
+      THUMB_PREFIX: "/"
+    volumes:
+      - .:/go/src/github.com/valerauko/video-transcoder
+      - ./.go-cache:/go/src
+    command: bash -c ./process.sh
