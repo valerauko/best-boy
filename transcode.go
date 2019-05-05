@@ -26,12 +26,12 @@ func startJob(record events.S3Entity) (*transcoder.CreateJobResponse, error) {
   // so if it contains any characters that would be changed
   // by URL encoding (space, non-ascii etc), the job fails
   input_key := record.Object.Key
-  output_key := strings.Replace(input_key, input_prefix, video_prefix, 1)
+  without_ext := strings.TrimSuffix(input_key, filepath.Ext(input_key))
+
+  output_key := strings.Replace(without_ext, input_prefix, video_prefix, 1)
   // the thumbnail then gets processed
   thumb_pattern := strings.Replace(
-    fmt.Sprintf(
-      "%s-{count}.png", strings.TrimSuffix(input_key, filepath.Ext(input_key)),
-    ),
+    fmt.Sprintf("%s-{count}", without_ext),
     input_prefix, thumb_prefix, 1,
   )
 
