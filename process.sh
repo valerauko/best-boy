@@ -1,2 +1,2 @@
-go get;
-go build -o target/video-transcoder;
+go get -v;
+go build -v -o target/video-transcoder;
