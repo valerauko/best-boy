@@ -28,7 +28,7 @@ func startJob(record events.S3Entity) (*transcoder.CreateJobResponse, error) {
   input_key := record.Object.Key
   without_ext := strings.TrimSuffix(input_key, filepath.Ext(input_key))
 
-  output_key := strings.Replace(without_ext, input_prefix, video_prefix, 1)
+  output_key := strings.Replace(input_key, input_prefix, video_prefix, 1)
   // the thumbnail then gets processed
   thumb_pattern := strings.Replace(
     fmt.Sprintf("%s-{count}", without_ext),
