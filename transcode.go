@@ -41,7 +41,7 @@ func startJob(record events.S3Entity) (*transcoder.CreateJobResponse, error) {
   sess := session.Must(
     session.NewSession(
       &aws.Config{
-        Region: aws.String(os.Getenv("AWS_REGION")),
+        Region: aws.String(os.Getenv("REGION")),
       },
     ),
   )

@@ -19,7 +19,7 @@ functions:
   videoTranscoder:
     handler: video-transcoder
     environment:
-      AWS_REGION: ${self:custom.conf.${self:provider.stage}.region}
+      REGION: ${self:custom.conf.${self:provider.stage}.region}
       INPUT_PREFIX: ${self:custom.conf.${self:provider.stage}.input.prefix}
       PIPELINE_ID: ${self:custom.conf.${self:provider.stage}.transcode.pipeline}
       PRESET_ID: ${self:custom.conf.${self:provider.stage}.transcode.preset}
