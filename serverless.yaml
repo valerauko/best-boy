@@ -12,27 +12,27 @@ provider:
   runtime: go1.x
   stage: ${opt:stage, self:custom.defaultStage}
   profile: ${self:custom.conf.${self:provider.stage}.profile}
-  region: ${self:custom.conf.${self:provider.stage}.settings.region}
+  region: ${self:custom.conf.${self:provider.stage}.region}
   iamManagedPolicies:
-    - ${self:custom.conf.${self:provider.stage}.settings.iam}
+    - ${self:custom.conf.${self:provider.stage}.iam}
 
 functions:
   enjinvideo:
     handler: video-transcoder
     environment:
-      AWS_REGION: ${self:custom.conf.${self:provider.stage}.settings.region}
-      INPUT_PREFIX: ${self:custom.conf.${self:provider.stage}.settings.input.prefix}
-      PIPELINE_ID: ${self:custom.conf.${self:provider.stage}.settings.transcode.pipeline}
-      PRESET_ID: ${self:custom.conf.${self:provider.stage}.settings.transcode.preset}
-      THUMB_PREFIX: ${self:custom.conf.${self:provider.stage}.settings.output.thumbPrefix}
-      VIDEO_PREFIX: ${self:custom.conf.${self:provider.stage}.settings.output.videoPrefix}
+      AWS_REGION: ${self:custom.conf.${self:provider.stage}.region}
+      INPUT_PREFIX: ${self:custom.conf.${self:provider.stage}.input.prefix}
+      PIPELINE_ID: ${self:custom.conf.${self:provider.stage}.transcode.pipeline}
+      PRESET_ID: ${self:custom.conf.${self:provider.stage}.transcode.preset}
+      THUMB_PREFIX: ${self:custom.conf.${self:provider.stage}.output.thumbPrefix}
+      VIDEO_PREFIX: ${self:custom.conf.${self:provider.stage}.output.videoPrefix}
     events:
       - s3:
-        bucket: ${self:custom.conf.${self:provider.stage}.settings.input.bucket}
+        bucket: ${self:custom.conf.${self:provider.stage}.input.bucket}
         event: s3:ObjectCreated:*
         existing: true
         rules:
-          - prefix: ${self:custom.conf.${self:provider.stage}.settings.input.prefix}
+          - prefix: ${self:custom.conf.${self:provider.stage}.input.prefix}
 
 package:
   exclude:
