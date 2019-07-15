@@ -26,6 +26,7 @@ functions:
       THUMB_PREFIX: ${self:custom.conf.${self:provider.stage}.output.thumbPrefix}
       VIDEO_PREFIX: ${self:custom.conf.${self:provider.stage}.output.videoPrefix}
     events:
+      # this doesn't work
       - s3:
         bucket: ${self:custom.conf.${self:provider.stage}.input.bucket}
         event: 's3:ObjectCreated:*'
