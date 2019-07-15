@@ -1,0 +1,43 @@
+service: replicate-s3-backup
+
+custom:
+  defaultStage: dev
+  conf:
+    dev: ${file(./conf/dev.yml)}
+    stg: ${file(./conf/stg.yml)}
+    prd: ${file(./conf/prd.yml)}
+
+provider:
+  name: aws
+  runtime: go1.x
+  stage: ${opt:stage, self:custom.defaultStage}
+  profile: ${self:custom.conf.${self:provider.stage}.profile}
+  region: ${self:custom.conf.${self:provider.stage}.settings.region}
+  iamManagedPolicies:
+    - ${self:custom.conf.${self:provider.stage}.settings.iam}
+
+functions:
+  enjinvideo:
+    handler: video-transcoder
+    environment:
+      AWS_REGION: ${self:custom.conf.${self:provider.stage}.settings.region}
+      INPUT_PREFIX: ${self:custom.conf.${self:provider.stage}.settings.input.prefix}
+      PIPELINE_ID: ${self:custom.conf.${self:provider.stage}.settings.transcode.pipeline}
+      PRESET_ID: ${self:custom.conf.${self:provider.stage}.settings.transcode.preset}
+      THUMB_PREFIX: ${self:custom.conf.${self:provider.stage}.settings.output.thumbPrefix}
+      VIDEO_PREFIX: ${self:custom.conf.${self:provider.stage}.settings.output.videoPrefix}
+    events:
+      - s3:
+        bucket: ${self:custom.conf.${self:provider.stage}.settings.input.bucket}
+        event: s3:ObjectCreated:*
+        existing: true
+        rules:
+          - prefix: ${self:custom.conf.${self:provider.stage}.settings.input.prefix}
+
+package:
+  exclude:
+    - test/**
+    - target/**
+    - docker-compose.yml
+    - Dockerfile
+    - README.md
