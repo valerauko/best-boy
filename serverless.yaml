@@ -28,7 +28,7 @@ functions:
     events:
       - s3:
         bucket: ${self:custom.conf.${self:provider.stage}.input.bucket}
-        event: s3:ObjectCreated:*
+        event: 's3:ObjectCreated:*'
         existing: true
         rules:
           - prefix: ${self:custom.conf.${self:provider.stage}.input.prefix}
@@ -40,3 +40,5 @@ package:
     - docker-compose.yml
     - Dockerfile
     - README.md
+    - .go-cache/**
+    - .git/**
