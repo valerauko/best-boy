@@ -1,4 +1,4 @@
-service: video-transcoder-lambda
+service: video-transcoder
 
 custom:
   defaultStage: dev
@@ -17,7 +17,7 @@ provider:
 
 functions:
   videoTranscoder:
-    handler: video-transcoder
+    handler: target/video-transcoder
     environment:
       REGION: ${self:custom.conf.${self:provider.stage}.region}
       INPUT_PREFIX: ${self:custom.conf.${self:provider.stage}.input.prefix}
