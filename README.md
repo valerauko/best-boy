@@ -21,5 +21,3 @@ The following environment variables can be used to configure:
 * THUMB_PREFIX
 
 The pipeline and preset IDs are obviously required, and Go will probably throw some null pointer exception if the others are missing too.
-
-The video will have its extension (`.mov` for example) stripped. Better nothing than having a wrong one.

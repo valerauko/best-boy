@@ -1,4 +1,4 @@
-service: replicate-s3-backup
+service: video-transcoder-lambda
 
 custom:
   defaultStage: dev
@@ -13,11 +13,10 @@ provider:
   stage: ${opt:stage, self:custom.defaultStage}
   profile: ${self:custom.conf.${self:provider.stage}.profile}
   region: ${self:custom.conf.${self:provider.stage}.region}
-  iamManagedPolicies:
-    - ${self:custom.conf.${self:provider.stage}.iam}
+  role: ${self:custom.conf.${self:provider.stage}.iam}
 
 functions:
-  enjinvideo:
+  videoTranscoder:
     handler: video-transcoder
     environment:
       AWS_REGION: ${self:custom.conf.${self:provider.stage}.region}
@@ -37,7 +36,7 @@ functions:
 package:
   exclude:
     - test/**
-    - target/**
+    - event.json
     - docker-compose.yml
     - Dockerfile
     - README.md
