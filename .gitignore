@@ -6,3 +6,7 @@
 
 .go-cache
 target
+
+conf/*.yml
+
+.serverless

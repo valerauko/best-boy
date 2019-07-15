@@ -29,6 +29,7 @@ func startJob(record events.S3Entity) (*transcoder.CreateJobResponse, error) {
   without_ext := strings.TrimSuffix(input_key, filepath.Ext(input_key))
 
   output_key := strings.Replace(input_key, input_prefix, video_prefix, 1)
+
   // the thumbnail then gets processed
   thumb_pattern := strings.Replace(
     fmt.Sprintf("%s-{count}", without_ext),
@@ -40,7 +41,7 @@ func startJob(record events.S3Entity) (*transcoder.CreateJobResponse, error) {
   sess := session.Must(
     session.NewSession(
       &aws.Config{
-        Region: aws.String("ap-northeast-1"),
+        Region: aws.String(os.Getenv("REGION")),
       },
     ),
   )

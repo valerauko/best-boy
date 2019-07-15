@@ -1,0 +1,45 @@
+service: video-transcoder
+
+custom:
+  defaultStage: dev
+  conf:
+    dev: ${file(./conf/dev.yml)}
+    stg: ${file(./conf/stg.yml)}
+    prd: ${file(./conf/prd.yml)}
+
+provider:
+  name: aws
+  runtime: go1.x
+  stage: ${opt:stage, self:custom.defaultStage}
+  profile: ${self:custom.conf.${self:provider.stage}.profile}
+  region: ${self:custom.conf.${self:provider.stage}.region}
+  role: ${self:custom.conf.${self:provider.stage}.iam}
+
+functions:
+  videoTranscoder:
+    handler: target/video-transcoder
+    environment:
+      REGION: ${self:custom.conf.${self:provider.stage}.region}
+      INPUT_PREFIX: ${self:custom.conf.${self:provider.stage}.input.prefix}
+      PIPELINE_ID: ${self:custom.conf.${self:provider.stage}.transcode.pipeline}
+      PRESET_ID: ${self:custom.conf.${self:provider.stage}.transcode.preset}
+      THUMB_PREFIX: ${self:custom.conf.${self:provider.stage}.output.thumbPrefix}
+      VIDEO_PREFIX: ${self:custom.conf.${self:provider.stage}.output.videoPrefix}
+    events:
+      # this doesn't work
+      - s3:
+        bucket: ${self:custom.conf.${self:provider.stage}.input.bucket}
+        event: 's3:ObjectCreated:*'
+        existing: true
+        rules:
+          - prefix: ${self:custom.conf.${self:provider.stage}.input.prefix}
+
+package:
+  exclude:
+    - test/**
+    - event.json
+    - docker-compose.yml
+    - Dockerfile
+    - README.md
+    - .go-cache/**
+    - .git/**
